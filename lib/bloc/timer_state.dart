@@ -14,3 +14,21 @@ class Ready extends TimerState {
   @override
   String toString() => 'Ready { duration: $duration}';
 }
+class Paused extends TimerState {
+  Paused(int duration) :super(duration);
+
+  @override
+  String toString() => 'Paused { duration: $duration}';
+}
+class Running extends TimerState {
+  Running(int duration) :super(duration);
+
+  @override
+  String toString() => 'Running { duration: $duration}';
+}
+class Finished extends TimerState {
+  Finished(int duration) :super(duration);
+
+  @override
+  String toString() => 'Finished';
+}
