@@ -1,33 +1,38 @@
+
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
 @immutable
-abstract class TimerState extends Equatable{
+abstract class TimerState extends Equatable {
   final int duration;
+
   TimerState(this.duration, [List props = const []])
-    : super([duration]..addAll(props));
+      : super([duration]..addAll(props));
 }
 
 class Ready extends TimerState {
-  Ready(int duration) :super(duration);
+  Ready(int duration) : super(duration);
 
   @override
-  String toString() => 'Ready { duration: $duration}';
+  String toString() => 'Ready { duration: $duration }';
 }
+
 class Paused extends TimerState {
-  Paused(int duration) :super(duration);
+  Paused(int duration) : super(duration);
 
   @override
-  String toString() => 'Paused { duration: $duration}';
+  String toString() => 'Paused { duration: $duration }';
 }
+
 class Running extends TimerState {
-  Running(int duration) :super(duration);
+  Running(int duration) : super(duration);
 
   @override
-  String toString() => 'Running { duration: $duration}';
+  String toString() => 'Running { duration: $duration }';
 }
+
 class Finished extends TimerState {
-  Finished(int duration) :super(duration);
+  Finished() : super(0);
 
   @override
   String toString() => 'Finished';
