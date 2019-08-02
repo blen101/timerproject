@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:timmerapp/bloc/bloc.dart';
 import 'package:timmerapp/ticker.dart';
+import 'package:wave/wave.dart';
+import 'package:wave/config.dart';
 
 void main() => runApp(MyApp());
 
@@ -34,6 +36,61 @@ class _MyAppState extends State<MyApp> {
     super.dispose();
   }
 }
+
+class Timer extends StatelessWidget {
+  static const TextStyle timerTextStyle = TextStyle(
+    fontSize: 60,
+    fontWeight: FontWeight.bold,
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    final TimerBloc _timerBloc = BlocProvider.of<TimerBloc>(context);
+    return Scaffold(
+      appBar: AppBar(title: Text('Flutter Timer')),
+      body: Stack(
+        children: [
+          Background(),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 100.0),
+                child: Center(
+                  child: BlocBuilder(
+                    bloc: _timerBloc,
+                    builder: (context, state) {
+                      final String minutesStr = ((state.duration / 60) % 60)
+                          .floor()
+                          .toString()
+                          .padLeft(2, '0');
+                      final String secondsStr = (state.duration % 60)
+                          .floor()
+                          .toString()
+                          .padLeft(2, '0');
+                      return Text(
+                        '$minutesStr:$secondsStr',
+                        style: Timer.timerTextStyle,
+                      );
+                    },
+                  ),
+                ),
+              ),
+              BlocBuilder(
+                condition: (previousState, currentState) =>
+                    currentState.runtimeType != previousState.runtimeType,
+                bloc: _timerBloc,
+                builder: (context, state) => Actions(),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class Actions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -92,49 +149,37 @@ class Actions extends StatelessWidget {
     return [];
   }
 }
-class Timer extends StatelessWidget {
-  static const TextStyle timerTextStyle = TextStyle(
-    fontSize: 60,
-    fontWeight: FontWeight.bold,
-  );
 
+class Background extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final TimerBloc _timerBloc = BlocProvider.of<TimerBloc>(context);
-    return Scaffold(
-      appBar: AppBar(title: Text('Flutter Timer')),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 100.0),
-            child: Center(
-              child: BlocBuilder(
-                bloc: _timerBloc,
-                builder: (context, state) {
-                  final String minutesStr = ((state.duration / 60) % 60)
-                      .floor()
-                      .toString()
-                      .padLeft(2, '0');
-                  final String secondsStr =
-                      (state.duration % 60).floor().toString().padLeft(2, '0');
-                  return Text(
-                    '$minutesStr:$secondsStr',
-                    style: Timer.timerTextStyle,
-                  );
-                },
-              ),
-            ),
-          ),
-          BlocBuilder(
-            condition: (previousState, currentState) =>
-                currentState.runtimeType != previousState.runtimeType,
-            bloc: _timerBloc,
-            builder: (context, state) => Actions(),
-          ),
+    return WaveWidget(
+      config: CustomConfig(
+        gradients: [
+          [
+            Color.fromRGBO(72, 74, 126, 1),
+            Color.fromRGBO(125, 170, 206, 1),
+            Color.fromRGBO(184, 189, 245, 0.7)
+          ],
+          [
+            Color.fromRGBO(72, 74, 126, 1),
+            Color.fromRGBO(125, 170, 206, 1),
+            Color.fromRGBO(172, 182, 219, 0.7)
+          ],
+          [
+            Color.fromRGBO(72, 73, 126, 1),
+            Color.fromRGBO(125, 170, 206, 1),
+            Color.fromRGBO(190, 238, 246, 0.7)
+          ],
         ],
+        durations: [19440, 10800, 6000],
+        heightPercentages: [0.03, 0.01, 0.02],
+        gradientBegin: Alignment.bottomCenter,
+        gradientEnd: Alignment.topCenter,
       ),
+      size: Size(double.infinity, double.infinity),
+      waveAmplitude: 25,
+      backgroundColor: Colors.blue[50],
     );
   }
 }
